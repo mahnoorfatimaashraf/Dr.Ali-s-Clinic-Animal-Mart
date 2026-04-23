@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Ali's Clinic & Animal Mart</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #6BBF2F;
+    --green-dark: #4a8f1a;
+    --green-light: #e8f5d9;
+    --dark: #2b2b2b;
+    --dark2: #3d3d3d;
+    --gray: #f7f7f5;
+    --gray2: #efefec;
+    --text: #2b2b2b;
+    --text-muted: #6b6b6b;
+    --white: #ffffff;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Nunito', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e8e8e8;
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo img { height: 48px; width: auto; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 15px; transition: color .2s; }
+  .nav-links a:hover { color: var(--green); }
+  .nav-cta {
+    background: var(--green); color: var(--white);
+    padding: 10px 24px; border-radius: 50px;
+    font-weight: 700; font-size: 15px; text-decoration: none;
+    transition: background .2s, transform .15s;
+  }
+  .nav-cta:hover { background: var(--green-dark); transform: translateY(-1px); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 26px; height: 2.5px; background: var(--dark); border-radius: 4px; transition: .3s; }
+
+  /* HERO */
+  .hero {
+    margin-top: 72px;
+    min-height: calc(100vh - 72px);
+    background: linear-gradient(135deg, #0f4d35 0%, #1a7a52 50%, #3da06e 100%);
+    display: flex; align-items: center;
+    padding: 60px 5%;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .hero-content { flex: 1; max-width: 580px; position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; padding: 8px 18px; border-radius: 50px;
+    font-size: 13px; font-weight: 700; letter-spacing: .5px;
+    margin-bottom: 28px; text-transform: uppercase;
+  }
+  .hero-badge::before { content: ''; width: 8px; height: 8px; background: #6BBF2F; border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 7vw, 90px);
+    line-height: .95;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .hero h1 span { color: #6BBF2F; }
+  .hero-sub {
+    font-size: 18px; color: rgba(255,255,255,0.82); line-height: 1.6;
+    margin-bottom: 40px; font-weight: 500;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--green); color: #fff;
+    padding: 16px 36px; border-radius: 50px;
+    font-weight: 800; font-size: 16px; text-decoration: none;
+    transition: background .2s, transform .15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: #fff;
+    border: 2px solid rgba(255,255,255,0.5);
+    padding: 14px 34px; border-radius: 50px;
+    font-weight: 700; font-size: 16px; text-decoration: none;
+    transition: border-color .2s, background .2s, transform .15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+  .hero-image { flex: 1; display: flex; justify-content: flex-end; align-items: flex-end; position: relative; }
+  .hero-card {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--radius); padding: 20px 24px;
+    color: #fff; backdrop-filter: blur(8px);
+    position: absolute; left: -20px; bottom: 40px;
+    min-width: 200px;
+  }
+  .hero-card strong { font-size: 28px; font-weight: 800; display: block; }
+  .hero-card span { font-size: 13px; opacity: .75; }
+  .hero-animals {
+    display: grid; grid-template-columns: repeat(3, 90px);
+    gap: 12px;
+  }
+  .animal-pill {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px; padding: 14px 10px;
+    text-align: center; color: #fff;
+    font-size: 12px; font-weight: 700;
+    backdrop-filter: blur(4px);
+    transition: background .2s;
+  }
+  .animal-pill:hover { background: rgba(255,255,255,0.25); }
+  .animal-pill .icon { font-size: 28px; display: block; margin-bottom: 6px; }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--dark); color: #fff;
+    display: flex; justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .stat {
+    padding: 28px 48px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,.1);
+    flex: 1; min-width: 160px;
+  }
+  .stat:last-child { border-right: none; }
+  .stat strong { font-size: 36px; font-weight: 800; color: var(--green); display: block; }
+  .stat span { font-size: 13px; opacity: .65; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+
+  /* SECTION WRAPPER */
+  section { padding: 90px 5%; }
+  .section-label {
+    display: inline-block;
+    background: var(--green-light); color: var(--green-dark);
+    font-size: 12px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase; padding: 6px 16px; border-radius: 50px;
+    margin-bottom: 16px;
+  }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 5vw, 56px); letter-spacing: 1px; line-height: 1; margin-bottom: 16px; }
+  .section-sub { color: var(--text-muted); font-size: 17px; line-height: 1.7; max-width: 560px; }
+
+  /* SERVICES */
+  .services-grid { margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .service-card {
+    background: var(--gray);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    transition: transform .2s, box-shadow .2s;
+    cursor: default;
+    border: 1.5px solid transparent;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--green); transform: scaleX(0); transform-origin: left;
+    transition: transform .3s;
+  }
+  .service-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.1); border-color: var(--green); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon {
+    width: 60px; height: 60px; background: var(--green-light);
+    border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    font-size: 28px; margin-bottom: 20px;
+  }
+  .service-card h3 { font-size: 19px; font-weight: 800; margin-bottom: 10px; }
+  .service-card p { color: var(--text-muted); font-size: 14px; line-height: 1.7; }
+
+  /* ANIMALS WE TREAT */
+  .animals-section { background: var(--gray2); }
+  .animals-grid { margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
+  .animal-card {
+    background: var(--white); border-radius: var(--radius);
+    padding: 32px 16px; text-align: center;
+    transition: transform .2s, box-shadow .2s;
+    border: 1.5px solid #ebebeb;
+  }
+  .animal-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.09); border-color: var(--green); }
+  .animal-card .emoji { font-size: 40px; margin-bottom: 12px; display: block; }
+  .animal-card span { font-size: 14px; font-weight: 700; color: var(--dark); }
+
+  /* WHY US */
+  .why-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .why-visual {
+    background: linear-gradient(135deg, #0f4d35, #3da06e);
+    border-radius: var(--radius);
+    padding: 56px 48px;
+    color: #fff;
+    position: relative; overflow: hidden;
+  }
+  .why-visual::after {
+    content: '🐾';
+    position: absolute; right: -20px; bottom: -20px;
+    font-size: 140px; opacity: .12;
+  }
+  .why-visual h2 { font-family: 'Bebas Neue', sans-serif; font-size: 52px; line-height: 1; margin-bottom: 20px; }
+  .why-visual p { font-size: 16px; opacity: .85; line-height: 1.7; }
+  .why-items { display: flex; flex-direction: column; gap: 28px; }
+  .why-item { display: flex; gap: 20px; align-items: flex-start; }
+  .why-num {
+    min-width: 44px; height: 44px; background: var(--green-light);
+    color: var(--green-dark); border-radius: 12px;
+    font-weight: 800; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .why-item h4 { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+  .why-item p { color: var(--text-muted); font-size: 14px; line-height: 1.6; }
+
+  /* PRODUCTS */
+  .products-section { background: var(--dark); }
+  .products-section .section-title { color: #fff; }
+  .products-section .section-sub { color: rgba(255,255,255,.6); }
+  .products-section .section-label { background: rgba(107,191,47,.2); color: #6BBF2F; }
+  .products-grid { margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+  .product-card {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    color: #fff;
+    transition: background .2s, transform .2s;
+  }
+  .product-card:hover { background: rgba(255,255,255,.12); transform: translateY(-3px); }
+  .product-card .p-icon { font-size: 36px; margin-bottom: 14px; display: block; }
+  .product-card h4 { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+  .product-card p { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.6; }
+
+  /* CONTACT */
+  .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .contact-info h2 { font-family: 'Bebas Neue', sans-serif; font-size: 48px; margin-bottom: 20px; }
+  .contact-info p { color: var(--text-muted); font-size: 16px; line-height: 1.7; margin-bottom: 40px; }
+  .contact-items { display: flex; flex-direction: column; gap: 20px; }
+  .contact-item { display: flex; gap: 16px; align-items: center; }
+  .contact-icon {
+    width: 48px; height: 48px; background: var(--green-light);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .contact-item strong { font-size: 15px; font-weight: 800; display: block; }
+  .contact-item span { font-size: 14px; color: var(--text-muted); }
+  .contact-item a { color: var(--green-dark); text-decoration: none; font-size: 14px; }
+  .contact-item a:hover { text-decoration: underline; }
+  .contact-form {
+    background: var(--gray);
+    border-radius: var(--radius);
+    padding: 40px;
+  }
+  .contact-form h3 { font-size: 22px; font-weight: 800; margin-bottom: 28px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--dark2); }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 12px 16px;
+    background: var(--white); border: 1.5px solid #e0e0e0;
+    border-radius: var(--radius-sm); font-family: 'Nunito', sans-serif;
+    font-size: 15px; color: var(--text);
+    transition: border-color .2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--green); }
+  .form-group textarea { height: 100px; resize: none; }
+  .form-submit {
+    width: 100%; background: var(--green); color: #fff;
+    border: none; padding: 14px; border-radius: 50px;
+    font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+    cursor: pointer; transition: background .2s, transform .15s;
+  }
+  .form-submit:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+  /* MAP EMBED */
+  .map-section { padding: 0; }
+  .map-section iframe { display: block; width: 100%; height: 400px; border: none; filter: grayscale(.2); }
+
+  /* FOOTER */
+  footer {
+    background: #111; color: rgba(255,255,255,.65);
+    padding: 56px 5% 32px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+  .footer-logo img { height: 44px; filter: brightness(0) invert(1); margin-bottom: 16px; }
+  .footer-about { font-size: 14px; line-height: 1.7; }
+  .footer-col h4 { color: #fff; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 18px; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul a { color: rgba(255,255,255,.55); text-decoration: none; font-size: 14px; transition: color .2s; }
+  .footer-col ul a:hover { color: var(--green); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.1); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 13px; }
+  .footer-socials { display: flex; gap: 12px; }
+  .social-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,.1); border: none;
+    color: rgba(255,255,255,.65); font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; text-decoration: none;
+    transition: background .2s;
+  }
+  .social-btn:hover { background: var(--green); color: #fff; }
+
+  /* FLOATING CTA */
+  .float-cta {
+    position: fixed; bottom: 28px; right: 28px; z-index: 200;
+    display: flex; flex-direction: column; gap: 12px;
+    align-items: flex-end;
+  }
+  .float-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 22px; border-radius: 50px;
+    text-decoration: none; font-weight: 800; font-size: 15px;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .float-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.25); }
+  .float-call { background: var(--dark); color: #fff; }
+  .float-wa { background: #25D366; color: #fff; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .hero { flex-direction: column; padding: 40px 5%; text-align: center; }
+    .hero-actions { justify-content: center; }
+    .hero-image { justify-content: center; margin-top: 40px; }
+    .hero-card { left: 50%; transform: translateX(-50%); bottom: -20px; }
+    .hero-animals { grid-template-columns: repeat(3, 85px); }
+    .why-layout { grid-template-columns: 1fr; }
+    .contact-layout { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .stat { padding: 24px 24px; }
+    .float-btn span.label { display: none; }
+  }
+  @media (max-width: 600px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ANIMATIONS */
+  .fade-up { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- FLOATING BUTTONS -->
+<div class="float-cta">
+  <a href="tel:03134330453" class="float-btn float-call">
+    📞 <span class="label">0313-4330453</span>
+  </a>
+  <a href="https://wa.me/923314082237" target="_blank" class="float-btn float-wa">
+    💬 <span class="label">WhatsApp Us</span>
+  </a>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="Dr__Ali_s_Clinic___Animal_Mart.jpeg" alt="Dr. Ali's Clinic Logo" onerror="this.style.display='none'">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--dark);letter-spacing:1px;">DR. ALI'S</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#animals">Animals</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="tel:03134330453" class="nav-cta">📞 Book Now</a>
+  <div class="hamburger" onclick="alert('Menu — use desktop view for full nav')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content fade-up">
+    <div class="hero-badge">✓ Lahore's Trusted Vet Clinic</div>
+    <h1>DR. ALI'S<br><span>CLINIC</span> &<br>ANIMAL MART</h1>
+    <p class="hero-sub">Large or Small — We Treat All.<br>Professional veterinary care & quality pet products in Lahore.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">🐾 Book Appointment</a>
+      <a href="#services" class="btn-outline">Our Services →</a>
+    </div>
+  </div>
+  <div class="hero-image">
+    <div class="hero-animals">
+      <div class="animal-pill"><span class="icon">🐕</span>Dogs</div>
+      <div class="animal-pill"><span class="icon">🐈</span>Cats</div>
+      <div class="animal-pill"><span class="icon">🐇</span>Rabbits</div>
+      <div class="animal-pill"><span class="icon">🦜</span>Birds</div>
+      <div class="animal-pill"><span class="icon">🐐</span>Goats</div>
+      <div class="animal-pill"><span class="icon">🐓</span>Poultry</div>
+    </div>
+    <div class="hero-card">
+      <strong>10+</strong>
+      <span>Years of Experience</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat fade-up"><strong>5000+</strong><span>Happy Pets</span></div>
+  <div class="stat fade-up"><strong>10+</strong><span>Years Experience</span></div>
+  <div class="stat fade-up"><strong>6+</strong><span>Animal Species</span></div>
+  <div class="stat fade-up"><strong>7 Days</strong><span>Open Weekly</span></div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What We Offer</div>
+  <h2 class="section-title">OUR SERVICES</h2>
+  <p class="section-sub">Comprehensive veterinary care tailored to keep your animals healthy and happy.</p>
+  <div class="services-grid">
+    <div class="service-card fade-up">
+      <div class="service-icon">🩺</div>
+      <h3>General Checkups</h3>
+      <p>Thorough physical examinations to monitor your pet's overall health and detect early signs of illness.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">💉</div>
+      <h3>Vaccinations</h3>
+      <p>Full vaccination programs for dogs, cats, rabbits, and livestock to prevent common and serious diseases.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🔬</div>
+      <h3>Lab Diagnostics</h3>
+      <p>On-site testing including blood work, urinalysis, and parasite screening for accurate diagnosis.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🏥</div>
+      <h3>Surgery</h3>
+      <p>Safe and professional surgical procedures from spaying/neutering to emergency operations.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🪮</div>
+      <h3>Grooming</h3>
+      <p>Bathing, haircuts, nail trimming and full grooming sessions to keep your pet looking and feeling great.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🐄</div>
+      <h3>Livestock Care</h3>
+      <p>Specialized care for goats, poultry, and other farm animals including deworming and health management.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🦷</div>
+      <h3>Dental Care</h3>
+      <p>Dental cleaning and oral health services to prevent tooth decay and gum disease in your pets.</p>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-icon">🚑</div>
+      <h3>Emergency Care</h3>
+      <p>Prompt attention for urgent cases — injuries, poisoning, and critical conditions handled quickly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ANIMALS WE TREAT -->
+<section id="animals" class="animals-section">
+  <div class="section-label">Species We Care For</div>
+  <h2 class="section-title">LARGE OR SMALL,<br>WE TREAT ALL</h2>
+  <p class="section-sub">From household pets to backyard animals, our clinic is equipped to handle all species.</p>
+  <div class="animals-grid">
+    <div class="animal-card fade-up"><span class="emoji">🐕</span><span>Dogs</span></div>
+    <div class="animal-card fade-up"><span class="emoji">🐈</span><span>Cats</span></div>
+    <div class="animal-card fade-up"><span class="emoji">🐇</span><span>Rabbits</span></div>
+    <div class="animal-card fade-up"><span class="emoji">🦜</span><span>Parrots</span></div>
+    <div class="animal-card fade-up"><span class="emoji">🐦</span><span>Birds</span></div>
+    <div class="animal-card fade-up"><span class="emoji">🐐</span><span>Goats</span></div>
+    <div class="animal-card fade-up"><span class="emoji">🐓</span><span>Poultry</span></div>
+    <div class="animal-card fade-up"><span class="emoji">🐟</span><span>Fish</span></div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="why-layout">
+    <div class="why-visual fade-up">
+      <h2>WHY CHOOSE DR. ALI'S?</h2>
+      <p>We combine expert veterinary knowledge with genuine love for animals. Every visit is handled with care, compassion, and professionalism — because your pet deserves nothing less.</p>
+      <div style="margin-top: 36px; display: flex; gap: 32px;">
+        <div><strong style="font-size: 36px; font-family: 'Bebas Neue', sans-serif;">100%</strong><br><span style="font-size: 13px; opacity:.7;">Satisfaction</span></div>
+        <div><strong style="font-size: 36px; font-family: 'Bebas Neue', sans-serif;">24/7</strong><br><span style="font-size: 13px; opacity:.7;">Support</span></div>
+      </div>
+    </div>
+    <div class="why-items">
+      <div class="why-item fade-up">
+        <div class="why-num">01</div>
+        <div>
+          <h4>Experienced Veterinarian</h4>
+          <p>Dr. Ali brings over a decade of hands-on experience treating a wide range of animal species with precision and care.</p>
+        </div>
+      </div>
+      <div class="why-item fade-up">
+        <div class="why-num">02</div>
+        <div>
+          <h4>Modern Equipment</h4>
+          <p>Our clinic is equipped with up-to-date diagnostic tools and surgical equipment for accurate results.</p>
+        </div>
+      </div>
+      <div class="why-item fade-up">
+        <div class="why-num">03</div>
+        <div>
+          <h4>Affordable Pricing</h4>
+          <p>Quality care shouldn't be expensive. We offer transparent, fair pricing with no hidden fees.</p>
+        </div>
+      </div>
+      <div class="why-item fade-up">
+        <div class="why-num">04</div>
+        <div>
+          <h4>Animal Mart On-Site</h4>
+          <p>Shop quality pet food, accessories, supplements and medications — all in one convenient location.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS / MART -->
+<section id="products" class="products-section">
+  <div class="section-label">Animal Mart</div>
+  <h2 class="section-title">SHOP AT OUR MART</h2>
+  <p class="section-sub">Everything your pet needs under one roof — from nutrition to care accessories.</p>
+  <div class="products-grid">
+    <div class="product-card fade-up">
+      <span class="p-icon">🥣</span>
+      <h4>Pet Food & Nutrition</h4>
+      <p>Premium dry & wet food for dogs, cats, birds, and small animals.</p>
+    </div>
+    <div class="product-card fade-up">
+      <span class="p-icon">💊</span>
+      <h4>Medicines & Supplements</h4>
+      <p>Vet-recommended medications, vitamins and health supplements.</p>
+    </div>
+    <div class="product-card fade-up">
+      <span class="p-icon">🛁</span>
+      <h4>Grooming Products</h4>
+      <p>Shampoos, brushes, nail clippers and grooming kits.</p>
+    </div>
+    <div class="product-card fade-up">
+      <span class="p-icon">🏠</span>
+      <h4>Cages & Accessories</h4>
+      <p>Bird cages, rabbit hutches, kennels and pet furniture.</p>
+    </div>
+    <div class="product-card fade-up">
+      <span class="p-icon">🎾</span>
+      <h4>Toys & Entertainment</h4>
+      <p>Keep your pets active and stimulated with quality toys.</p>
+    </div>
+    <div class="product-card fade-up">
+      <span class="p-icon">🦮</span>
+      <h4>Leashes & Collars</h4>
+      <p>Durable collars, leashes, harnesses and identification tags.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-layout">
+    <div class="contact-info fade-up">
+      <div class="section-label">Find Us</div>
+      <h2>GET IN TOUCH</h2>
+      <p>Visit us at our clinic or reach out via phone or WhatsApp. We're open 7 days a week to serve you and your animals.</p>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <strong>Location</strong>
+            <span>Shop #37 Ahmad Market, Near Gate No.2<br>Al Rehman Garden Phase 2, Lahore</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <strong>Phone</strong>
+            <a href="tel:03134330453">0313-4330453</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">💬</div>
+          <div>
+            <strong>WhatsApp</strong>
+            <a href="https://wa.me/923314082237">0331-4082237</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div>
+            <strong>Hours</strong>
+            <span>Open 7 Days a Week<br>Morning & Evening Sessions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form fade-up">
+      <h3>Book an Appointment</h3>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="e.g. Ahmed Khan">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="03xx-xxxxxxx">
+      </div>
+      <div class="form-group">
+        <label>Animal Type</label>
+        <select>
+          <option value="">Select animal...</option>
+          <option>Dog</option>
+          <option>Cat</option>
+          <option>Rabbit</option>
+          <option>Bird / Parrot</option>
+          <option>Goat</option>
+          <option>Poultry</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Service Needed</label>
+        <select>
+          <option value="">Select service...</option>
+          <option>General Checkup</option>
+          <option>Vaccination</option>
+          <option>Grooming</option>
+          <option>Surgery</option>
+          <option>Emergency</option>
+          <option>Lab Test</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message (optional)</label>
+        <textarea placeholder="Describe your pet's condition or any questions..."></textarea>
+      </div>
+      <button class="form-submit" onclick="const p=this.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.querySelector('input');const msg='Hi! I would like to book an appointment. Name: '+(p?p.value:'');window.open('https://wa.me/923314082237?text='+encodeURIComponent(msg),'_blank')">
+        📅 Book via WhatsApp
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<div class="map-section">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3401.0!2d74.2600!3d31.4700!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sAl+Rehman+Garden+Phase+2+Lahore!5e0!3m2!1sen!2spk!4v1234567890"
+    allowfullscreen="" loading="lazy"
+    title="Dr. Ali's Clinic Location">
+  </iframe>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">
+        <img src="Dr__Ali_s_Clinic___Animal_Mart.jpeg" alt="Dr. Ali's Clinic" onerror="this.style.display='none'">
+      </div>
+      <p class="footer-about">Dr. Ali's Clinic & Animal Mart — Lahore's trusted veterinary clinic serving all animals large and small. Professional care, quality products, and genuine compassion.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">General Checkups</a></li>
+        <li><a href="#services">Vaccinations</a></li>
+        <li><a href="#services">Surgery</a></li>
+        <li><a href="#services">Grooming</a></li>
+        <li><a href="#services">Lab Tests</a></li>
+        <li><a href="#services">Emergency</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Animals</h4>
+      <ul>
+        <li><a href="#animals">Dogs & Cats</a></li>
+        <li><a href="#animals">Rabbits</a></li>
+        <li><a href="#animals">Birds & Parrots</a></li>
+        <li><a href="#animals">Goats</a></li>
+        <li><a href="#animals">Poultry</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:03134330453">0313-4330453</a></li>
+        <li><a href="https://wa.me/923314082237">0331-4082237</a></li>
+        <li><a href="#contact">Ahmad Market, Lahore</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Dr. Ali's Clinic & Animal Mart. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="#" class="social-btn" title="Facebook">f</a>
+      <a href="https://wa.me/923314082237" class="social-btn" title="WhatsApp">W</a>
+      <a href="#" class="social-btn" title="Instagram">📸</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll animation
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
